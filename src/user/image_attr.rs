@@ -1,5 +1,5 @@
 use std::fs::{metadata, read_dir};
-use std::thread::{Thread, self};
+use std::thread;
 use std::time::Duration;
 
 use crate::utils::{image_arrtibute_init, open_folder};
@@ -27,8 +27,9 @@ pub fn image_attr(weak: Weak<Main>) {
                             image_arrtibute.name = SharedString::from(file_name);
                             image_arrtibute.path =
                                 SharedString::from(path.parent().unwrap().to_str().unwrap());
+                                let mut name = file_name.split(".");
                             image_arrtibute.out_name =
-                                SharedString::from(String::from("out_") + file_name);
+                                SharedString::from(String::from("out_") + name.next().unwrap());
                             image_arrtibute.out_path =
                                 SharedString::from(path.parent().unwrap().to_str().unwrap());
                             image_attrs.push(image_arrtibute);
@@ -56,8 +57,9 @@ pub fn image_attr(weak: Weak<Main>) {
                 let mut i = 0;
                 for m in vec_model.iter(){
                     let mut image_attribute = m.clone();
-                    //处理文件
-                    thread::sleep(Duration::from_millis(1000));
+
+                    let _ = image_attribute.convert();
+
                     image_attribute.handle_result = HandleStatus::Complete;
                     //更新界面
                     let _ = image_weak.upgrade_in_event_loop(move |main|{
@@ -69,5 +71,13 @@ pub fn image_attr(weak: Weak<Main>) {
                 }
             });
         }
+    });
+    let clear_image_list_weak = weak.clone();
+    main_weak.global::<ImageAttr>().on_clear_image_list(move ||{
+        let image_attrs = Vec::new();
+        clear_image_list_weak
+        .unwrap()
+        .global::<ImageAttr>()
+        .set_imageAttr(ModelRc::new(VecModel::from(image_attrs)));
     });
 }

@@ -7,9 +7,12 @@ impl ImageAttribute {
 
     pub fn convert(&mut self) -> Option<bool> {
         //判断图片的类型
+        let path = format!("{}/{}",self.path,self.name);
+        let out_path = format!("{}/{}",self.out_path,self.out_name);
+        
         if let Some(_res) = ff_convert(
-            &self.path,
-            &self.out_path,
+            &path,
+            &out_path,
             self.image_type,
             self.out_image_type,
         ) {

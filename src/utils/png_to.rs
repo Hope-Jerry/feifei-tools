@@ -15,7 +15,7 @@ pub fn ff_png_to_ico(path: &str, out_path: &str) -> Option<bool> {
     let image = ico::IconImage::read_png(file).unwrap();
     icon_dir.add_entry(ico::IconDirEntry::encode(&image).unwrap());
     //写入文件
-    let file = std::fs::File::create(out_path).unwrap();
+    let file = std::fs::File::create(format!("{}{}",out_path,".ico")).unwrap();
     icon_dir.write(file).unwrap();
     Some(true)
 }
@@ -57,7 +57,7 @@ pub fn ff_png_to_bmp(path: &str, out_path: &str) -> Option<bool> {
 
     // 保存深度图为PNG格式（你也可以保存为其他格式，或将数据导出为其他格式）
     dmp_img
-        .save_with_format(out_path, ImageFormat::Png)
+        .save_with_format(format!("{}{}",out_path,".png"), ImageFormat::Png)
         .expect("Failed to save as DMP");
 
     Some(true)
@@ -102,7 +102,7 @@ pub fn ff_png_to_svg(path: &str, out_path: &str) -> Option<bool> {
     let svg_footer = "</svg>";
 
     // 将 SVG 写入输出文件
-    let mut output_file = std::fs::File::create(out_path).expect("Failed to create SVG file");
+    let mut output_file = std::fs::File::create(format!("{}{}",out_path,".svg")).expect("Failed to create SVG file");
     writeln!(output_file, "{}", svg_header).expect("Failed to write SVG header");
     writeln!(output_file, "{}", svg_content).expect("Failed to write SVG content");
     writeln!(output_file, "{}", svg_footer).expect("Failed to write SVG footer");

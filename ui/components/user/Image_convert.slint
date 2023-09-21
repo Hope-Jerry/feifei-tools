@@ -41,7 +41,10 @@ component ImageConvert inherits Rectangle{
                 }
                 FFButton { 
                     theme: FFTheme.theme.second-button;
-                    button-name: "清空列表"; 
+                    button-name: "清空列表";
+                    clicked => {
+                        ImageAttr.clear-image-list()
+                    }
                 }
             }
             
