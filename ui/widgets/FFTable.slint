@@ -70,6 +70,7 @@ component FFTable inherits Rectangle{
                     Rectangle {
                         width: parent.width / 5;
                         ComboBox { 
+                            height: 30px;
                             width: 80px;
                             model: ["Jpeg", "Png", "Ico","Svg","Bmp"];
                             current-value: item.out-image-type == ImageConvertFormat.Jpeg?"Jpeg":
