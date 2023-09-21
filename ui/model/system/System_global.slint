@@ -1,0 +1,47 @@
+enum OperateEnum{
+    top,
+    maximize,
+    minimize,
+    close,
+    full
+}
+
+
+global BarGlobal {
+    
+    callback move(float,float);
+
+    callback window-operate(OperateEnum,string);
+
+    callback size-win(float,float,float,float,float,float);
+}
+
+enum Page{
+    HomePage,
+    ImageConvert,
+    Setting,
+    About
+}
+
+struct LeftMenuStruct {
+    name:string,
+    page:Page,
+}
+
+global LeftMenuGlobal {
+    in-out property <[LeftMenuStruct]> pages: [
+        {name:"主页面",page:Page.HomePage},
+        {name:"图片转换",page:Page.ImageConvert},
+        {name:"参数设置",page:Page.Setting},
+        {name:"关于",page:Page.About}
+    ];
+
+    //当前页面
+    in-out property <LeftMenuStruct> current-pages: pages[0];
+}
+
+
+export { BarGlobal, OperateEnum,Page, LeftMenuStruct,LeftMenuGlobal}
+
+
+

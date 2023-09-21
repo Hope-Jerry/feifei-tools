@@ -1,0 +1,212 @@
+//顶部状态栏
+import { BarGlobal,OperateEnum } from "../../model/system/System_global.slint";
+import { FFButton,FFImageButton } from "../../widgets/FFButton.slint";
+import { FFTheme,Theme } from "../../Theme.slint";
+import { Button } from "std-widgets.slint";
+
+component Bar inherits Rectangle{
+    
+    property <bool> drag-area-pressed: false;
+    property <length> drag-area-down-x: 0;
+    property <length> drag-area-down-y: 0;
+    in property <string> title;
+    in property <image> logo;
+    in-out property <bool> is-move: false;
+    in-out property <MouseCursor> barCursor: MouseCursor.default;
+    in-out property <Theme> theme: FFTheme.theme;
+    property <bool> is-top: false;
+
+    in-out property <bool> is_bar: true;
+    in-out property <bool> ff-visible: true;
+
+    background: transparent;
+    visible: ff-visible;
+
+    area := TouchArea{
+        moved => {
+            if(is-move){
+                BarGlobal.move((self.mouse-x - drag-area-down-x) / 1px,(self.mouse-y - drag-area-down-y) / 1px);
+            }
+        }
+        pointer-event(ev) => {
+            drag-area-pressed = ev.kind == PointerEventKind.down;
+            drag-area-down-x = self.mouse-x;
+            drag-area-down-y = self.mouse-y;
+            //如果右键点击，弹出菜单
+            if(ev.button == PointerEventButton.right && ev.kind == PointerEventKind.up){
+                pwin.show();
+            }else if(ev.button == PointerEventButton.left && ev.kind == PointerEventKind.down){
+                is-move = true;
+                barCursor = MouseCursor.move;
+            }else if(ev.button == PointerEventButton.left && ev.kind == PointerEventKind.up){
+                is-move = false;
+                barCursor = MouseCursor.default;
+            }
+        }
+        mouse-cursor: barCursor;
+    }
+
+    pwin := PopupWindow {
+        width: 100px;
+        height: 70px;
+        x: area.mouse-x;
+        y: area.mouse-y;
+        Rectangle {
+            width: 100px;
+            height: 75px;
+            border-width: 1px;
+            border-color: #F2F2F2;
+            VerticalLayout {
+                FFButton {
+                    button-name: "亮";
+                    clicked => {
+                        FFTheme.theme = FFTheme.bright;
+                    }
+                }
+                FFButton {
+                    button-name: "暗";
+                    clicked => {
+                        FFTheme.theme = FFTheme.dark;
+                    }
+                }
+                /*FFButton {
+                    button-name: "透明";
+                    clicked => {
+                        FFTheme.theme = FFTheme.transparent;
+                    }
+                }*/
+                /*FFButton {
+                    button-name: "全屏";
+                    clicked => {
+                        is_bar = false;
+                        BarGlobal.window-operate(OperateEnum.full,"quanping");
+                    }
+                }*/
+            }
+            
+        }
+    }
+
+    Rectangle {
+        width: 100%;
+        height: 35px;
+        background: theme.bar-background-color;
+        border-radius: 4px;
+        drop-shadow-color: theme.bar-shadow-color;
+        drop-shadow-offset-x: 0px;
+        drop-shadow-offset-y: 1px;
+        drop-shadow-blur: 3px;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.space-between;
+            Rectangle {
+                width: 150px;
+                height: 35px;
+                background: transparent;
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+                    Rectangle {
+                        width: 35px;
+                        height: 35px;
+                        Image {
+                            width: 30px;
+                            height: 30px;
+                            source: logo;
+                            //colorize: theme.logo-color;
+                        }
+                    }
+                }
+            }
+            Rectangle {
+                width: 150px;
+                height: 35px;
+                background: transparent;
+                Text {
+                    height: 35px;
+                    text: title;
+                    font-size: 15px;
+                    color: theme.bar-text-color;
+                    vertical-alignment: TextVerticalAlignment.center;
+                    font-weight: 800;
+                }
+            }
+            Rectangle {
+                width: 150px;
+                height: 35px;
+                background: transparent;
+                HorizontalLayout {
+                    alignment: LayoutAlignment.end;
+                    FFImageButton { 
+                        button-image: @image-url("../../assets/bar/top.svg");
+                        ff-width: 35px;
+                        ff-height: 35px;
+                        ff-drop-shadow-blur: 0px;
+                        ff-drop-shadow-offset-x: 0px;
+                        ff-drop-shadow-offset-y: 0px;
+                        ff-border-radius: 0px;
+                        ff-rotation-angle: is-top?45deg:0deg;
+                        theme: FFTheme.theme.grey-button;
+                        clicked => {
+                            //记录当前的状态，更换图标的尺寸
+                            if(is-top){
+                                is-top = false;
+                                BarGlobal.window-operate(OperateEnum.top,"1");
+                            }else{
+                                is-top = true;
+                                BarGlobal.window-operate(OperateEnum.top,"0");
+                            }
+                            
+                        }
+                    }
+                    FFImageButton { 
+                        button-image: @image-url("../../assets/bar/minimize.svg");
+                        ff-width: 35px;
+                        ff-height: 35px;
+                        ff-drop-shadow-blur: 0px;
+                        ff-drop-shadow-offset-x: 0px;
+                        ff-drop-shadow-offset-y: 0px;
+                        ff-border-radius: 0px;
+                        theme: FFTheme.theme.grey-button;
+                        clicked => {
+                            BarGlobal.window-operate(OperateEnum.minimize,"0");
+                        }
+                    }
+                    FFImageButton {
+                        button-image: @image-url("../../assets/bar/maximize.svg");
+                        ff-width: 35px;
+                        ff-height: 35px;
+                        ff-drop-shadow-blur: 0px;
+                        ff-drop-shadow-offset-x: 0px;
+                        ff-drop-shadow-offset-y: 0px;
+                        ff-border-radius: 0px;
+                        theme: FFTheme.theme.grey-button;
+                        clicked => {
+                            BarGlobal.window-operate(OperateEnum.maximize,"0");
+                        }
+                    }
+                    FFImageButton { 
+                        button-image: @image-url("../../assets/bar/close1.svg");
+                        ff-width: 35px;
+                        ff-height: 35px;
+                        ff-drop-shadow-blur: 0px;
+                        ff-drop-shadow-offset-x: 0px;
+                        ff-drop-shadow-offset-y: 0px;
+                        ff-border-radius: 0px;
+                        theme: FFTheme.theme.grey-button;
+                        clicked => {
+                            BarGlobal.window-operate(OperateEnum.close,"0");
+                        }
+                    }
+                }
+                
+            }
+        }
+
+    }
+
+}
+
+
+export { Bar }
+
+

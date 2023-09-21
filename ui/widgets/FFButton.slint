@@ -1,0 +1,151 @@
+//自定义按钮
+import { FFTheme,ButtonTheme } from "../Theme.slint";
+
+
+component FFButton inherits Rectangle{
+    in-out property <length> ff-width : 100px;
+    in-out property <length> ff-height: 35px;
+    in-out property <length> ff-font-size: 14px;
+
+    width: ff-width;
+    height: ff-height;
+
+    //按钮文字
+    in-out property <string> button-name;
+    //主题相关
+    in-out property <ButtonTheme> theme : FFTheme.theme.primary-button;
+    //鼠标悬浮
+    in-out property <MouseCursor> mouse-cursor: MouseCursor.default;
+    //圆角
+    in property <length> ff-border-radius: 2px;
+    //边框宽度
+    in property <length> ff-border-width: 0.8px;
+
+    in property <length> ff-drop-shadow-blur: 6px;
+
+    in property <length> ff-drop-shadow-offset-x: 2px;
+
+    in property <length> ff-drop-shadow-offset-y: 2px;
+    
+    callback clicked();
+
+    Rectangle {
+        width: area.pressed?ff-width - 10px : ff-width;
+        height: area.pressed?ff-height -5px : ff-height;
+        border-radius: ff-border-radius;
+        animate width{ 
+            duration:60ms;
+        }
+        animate height{ 
+            duration:60ms;
+        }
+        area := TouchArea {
+            clicked => {
+                clicked()
+            }
+            mouse-cursor: mouse-cursor;
+        }
+        background: area.pressed?theme.click-background-color:area.has-hover?theme.hover-background-color:theme.background-color;
+        border-color: area.pressed?theme.click-border-color:area.has-hover?theme.hover-border-color:theme.border-color;
+        border-width: ff-border-width;
+        animate background{ 
+            duration:60ms;
+        }
+        //阴影效果
+        drop-shadow-color: black;
+        drop-shadow-offset-x: ff-drop-shadow-offset-x;
+        drop-shadow-offset-y: ff-drop-shadow-offset-y;
+        drop-shadow-blur: area.pressed?ff-drop-shadow-blur - 10px:ff-drop-shadow-blur;
+        animate  drop-shadow-blur{ 
+            duration:30ms;
+        }
+        Rectangle {
+            Text {
+                text: button-name;
+                color: area.pressed?theme.click-text-color:area.has-hover?theme.hover-text-color:theme.text-color;
+                font-size: ff-font-size;
+                font-weight: 500;
+            }
+        }
+
+    }
+}
+
+
+component FFImageButton inherits Rectangle{
+
+    in property <image> button-image;
+
+    in-out property <length> ff-width : 100px;
+    in-out property <length> ff-height: 40px;
+    in-out property <length> ff-font-size: 17px;
+
+    width: ff-width;
+    height: ff-height;
+
+    //主题相关
+    in-out property <ButtonTheme> theme : FFTheme.theme.primary-button;
+    //鼠标悬浮
+    in-out property <MouseCursor> mouse-cursor: MouseCursor.default;
+    //圆角
+    in property <length> ff-border-radius: 3px;
+    //边框宽度
+    in property <length> ff-border-width: 0.8px;
+
+    in property <length> ff-drop-shadow-blur: 6px;
+
+    in property <length> ff-drop-shadow-offset-x: 2px;
+
+    in property <length> ff-drop-shadow-offset-y: 2px;
+
+    in property <angle> ff-rotation-angle: 0deg;
+    
+    callback clicked();
+
+    Rectangle {
+        width: area.pressed?ff-width - 10px : ff-width;
+        height: area.pressed?ff-height -5px : ff-height;
+        border-radius: ff-border-radius;
+        animate width{ 
+            duration:60ms;
+        }
+        animate height{ 
+            duration:60ms;
+        }
+        area := TouchArea {
+            clicked => {
+                clicked()
+            }
+            mouse-cursor: mouse-cursor;
+        }
+        background: area.pressed?theme.click-background-color:area.has-hover?theme.hover-background-color:theme.background-color;
+        border-color: area.pressed?theme.click-border-color:area.has-hover?theme.hover-border-color:theme.border-color;
+        border-width: ff-border-width;
+        animate background{ 
+            duration:60ms;
+        }
+        //阴影效果
+        drop-shadow-color: black;
+        drop-shadow-offset-x: ff-drop-shadow-offset-x;
+        drop-shadow-offset-y: ff-drop-shadow-offset-y;
+        drop-shadow-blur: area.pressed?ff-drop-shadow-blur - 10px:ff-drop-shadow-blur;
+        animate  drop-shadow-blur{ 
+            duration:30ms;
+        }
+        Rectangle {
+            Image {
+                width: ff-width * 0.6;
+                height: ff-height * 0.6;
+                source: button-image;
+                colorize:area.pressed?theme.click-text-color:area.has-hover?theme.hover-text-color:theme.text-color;
+                rotation-angle: ff-rotation-angle;
+                rotation-origin-x: ff-width * 0.6 / 2;
+                rotation-origin-y: ff-height * 0.6 / 2;
+            }
+        }
+
+    }
+}
+
+
+export { FFButton, FFImageButton }

@@ -1,0 +1,49 @@
+
+enum ImageConvertFormat{
+    Png,
+    Ico,
+    Bmp,
+    Svg,
+    Jpeg
+}
+
+enum HandleStatus{
+    //等待
+    Wait,
+    //处理中
+    Processing,
+    //完成
+    Complete,
+    //错误
+    Error
+}
+
+struct ImageAttribute {
+    path: string,
+    name: string,
+    width: int,
+    height: int,
+    n-width: int,
+    n-height: int,
+    out-path: string,
+    out-name: string,
+    image-type: ImageConvertFormat,
+    out-image-type: ImageConvertFormat,
+    handle-result: HandleStatus,
+}
+
+
+global ImageAttr {
+    //存放所有的图片路径
+    in-out property <[ImageAttribute]> imageAttr;
+
+    //存放当前选择的目录
+    in-out property <string> current-path: "";
+
+    callback select-folder();
+
+    callback handle-image();
+}
+
+
+export { ImageAttr,ImageAttribute,ImageConvertFormat,HandleStatus }

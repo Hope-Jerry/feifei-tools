@@ -1,0 +1,98 @@
+import { Bar } from "components/system/Bar.slint";
+import { BarGlobal,OperateEnum,Page, LeftMenuStruct,LeftMenuGlobal } from "./model/system/System_global.slint";
+import { Win } from "components/system/Win.slint";
+import { FFAbout } from "components/user/FFAbout.slint";
+import { HomePage } from "components/user/Home_page.slint";
+import { ImageConvert } from "components/user/Image_convert.slint";
+import { FFButton } from "widgets/FFButton.slint";
+import { FFTheme } from "Theme.slint";
+import { LeftMenu } from "components/system/Left_menu.slint";
+import { ImageAttribute,ImageConvertFormat,ImageAttr } from "./model/user/Image_attr_global.slint";
+import { HorizontalBox } from "std-widgets.slint";
+
+export { BarGlobal,OperateEnum,ImageAttribute,ImageConvertFormat,ImageAttr,Page, LeftMenuStruct,LeftMenuGlobal}
+
+component Main inherits Window {
+    
+    property <image> logo: @image-url("./assets/logo/logo.png");
+
+    icon: logo;
+    title: "工具箱";
+    //最小尺寸目前不支持，只有第一次启动起作用
+    min-width: 1000px;
+    min-height: 700px;
+    background: transparent;
+    no-frame: true;
+
+    property <length> ff-width: self.width;
+    property <length> ff-height: self.height;
+
+    property <bool> is_bar: true;
+
+    Win {
+        win-width: ff-width;
+        win-height: ff-height;
+        background: transparent;
+
+
+        FocusScope {
+            key-pressed(ke) => {
+                BarGlobal.window-operate(OperateEnum.full,ke.text);
+                is-bar = true;
+                EventResult.accept
+            }
+        }
+
+        VerticalLayout {
+            alignment: LayoutAlignment.start;
+            //标题栏
+            Bar {
+                background: transparent;
+                title: "工具箱";
+                logo: @image-url("./assets/logo/logo.svg");
+                is-bar <=> is-bar;
+                ff-visible: is-bar;
+            }
+            Rectangle {height: 1px;}
+            //内容
+            Rectangle {
+                background: transparent;
+                HorizontalLayout { 
+                    x: 0px;
+                    y: 0px;
+                    padding: 0px;
+                    height: ff-height;
+                    LeftMenu{}
+                    Rectangle {
+                        width: 1px;
+                        background: #cacaca;
+                    }
+                    Rectangle {
+                        if(LeftMenuGlobal.current-pages.page == Page.HomePage) : HomePage{}
+                        if(LeftMenuGlobal.current-pages.page == Page.ImageConvert) : ImageConvert{}
+                        if(LeftMenuGlobal.current-pages.page == Page.About) : FFAbout{}
+                    }
+                }
+                //弹窗
+                /*Rectangle {
+                    x: 0px;
+                    y: 0px;
+                    width: ff-width;
+                    height: ff-height;
+                    //background: Colors.pink;
+                    Rectangle {
+                        y: 50px;
+                        width: 100px;
+                        height: 100px;
+                        background: Colors.red;
+                    }
+                }*/
+            }
+        }
+    }
+
+}
+
+export { Main }
+
+

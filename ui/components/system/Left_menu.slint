@@ -1,0 +1,19 @@
+import { FFButton } from "../../widgets/FFButton.slint";
+import { LeftMenuGlobal } from "../../model/system/System_global.slint";
+
+component LeftMenu inherits Rectangle {
+    width: 101px;
+    background: #efeded;
+    VerticalLayout {
+        for page in LeftMenuGlobal.pages: FFButton {
+            button-name: page.name;
+            clicked => {
+                LeftMenuGlobal.current-pages = page;
+            }
+        }
+    }
+
+    
+}
+
+export { LeftMenu }

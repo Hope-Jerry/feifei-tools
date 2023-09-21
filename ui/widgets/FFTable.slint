@@ -1,0 +1,116 @@
+import {ImageAttr,ImageAttribute,ImageConvertFormat,HandleStatus} from "../model/user/Image_attr_global.slint";
+import { ComboBox , ListView} from "std-widgets.slint";
+
+
+component FFTable inherits Rectangle{
+
+    in-out property <[{name:string,component-name:string}]> titles: [
+        {name:"名称",component-name:"text"},
+        {name:"尺寸",component-name:"text"},
+        {name:"类型",component-name:"text"},
+        {name:"转换为",component-name:"text"},
+        {name:"状态",component-name:"text"}
+    ];
+
+    in-out property <[ImageAttribute]> image-attrs: [
+        {name:"1.jpg",width:100,height:100,image_type:ImageConvertFormat.Jpeg},
+        {name:"2.jpg",width:100,height:100,image_type:ImageConvertFormat.Jpeg}
+    ];
+
+    VerticalLayout {
+        padding-bottom: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+
+        HorizontalLayout {
+            height: 40px;
+            for item in titles :Rectangle {
+                width: parent.width / 5;
+                Text {
+                    text: item.name;
+                }  
+            }
+        }
+        ListView {
+            for item in image-attrs :
+            Rectangle{
+                height: 30px;
+                area := TouchArea {
+
+                }
+                background: area.has-hover?#c9c8c8:#FFFFFF;
+                HorizontalLayout {
+                    height: 30px;
+                    Rectangle {
+                        width: parent.width / 5;
+                        Text {
+                            wrap: TextWrap.word-wrap;
+                            horizontal-alignment: TextHorizontalAlignment.left;
+                            text: item.name;
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width / 5;
+                        Text {
+                            horizontal-alignment: TextHorizontalAlignment.left;
+                            text: item.width + "x" + item.height;
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width / 5;
+                        Text {
+                            horizontal-alignment: TextHorizontalAlignment.left;
+                            text: item.image-type == ImageConvertFormat.Jpeg?"Jpeg":
+                            item.image-type == ImageConvertFormat.Png?"Png":
+                            item.image-type == ImageConvertFormat.Ico?"Ico":
+                            item.image-type == ImageConvertFormat.Bmp?"Bmp":
+                            item.image-type == ImageConvertFormat.Svg?"Svg":"None";
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width / 5;
+                        ComboBox { 
+                            width: 80px;
+                            model: ["Jpeg", "Png", "Ico","Svg","Bmp"];
+                            current-value: item.out-image-type == ImageConvertFormat.Jpeg?"Jpeg":
+                            item.out-image-type == ImageConvertFormat.Png?"Png":
+                            item.out-image-type == ImageConvertFormat.Ico?"Ico":
+                            item.out-image-type == ImageConvertFormat.Bmp?"Bmp":
+                            item.out-image-type == ImageConvertFormat.Svg?"Svg":"None";
+                            selected(tp) => {
+                                if(tp == "Jpeg"){
+                                    item.out-image-type = ImageConvertFormat.Jpeg;
+                                }else if(tp == "Ico"){
+                                    item.out-image-type = ImageConvertFormat.Ico;
+                                }else if(tp == "Png"){
+                                    item.out-image-type = ImageConvertFormat.Png;
+                                }else if(tp == "Svg"){
+                                    item.out-image-type = ImageConvertFormat.Svg;
+                                }else if(tp == "Bmp"){
+                                    item.out-image-type = ImageConvertFormat.Bmp;
+                                }
+                            }
+                        }
+                    }
+                    Rectangle {
+                        width: parent.width / 5;
+                        Text {
+                            color: item.handle-result == HandleStatus.Error?red:black;
+                            horizontal-alignment: TextHorizontalAlignment.left;
+                            text: item.handle-result == HandleStatus.Wait?"Wait":
+                            item.handle-result == HandleStatus.Processing?"Processing":
+                            item.handle-result == HandleStatus.Complete?"Complete":"Error";
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+}
+
+
+export { FFTable }

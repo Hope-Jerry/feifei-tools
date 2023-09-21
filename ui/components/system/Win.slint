@@ -1,0 +1,61 @@
+import {BarGlobal} from "../../model/system/System_global.slint";
+import {FFTheme,Theme} from "../../Theme.slint";
+
+
+component Win inherits Rectangle {
+    
+    in property <length> win-width;
+
+    in property <length> win-height;
+
+    in-out property <Theme> theme : FFTheme.theme;
+
+    property <length> record-x;
+    property <length> record-y;
+    property <length> record-width;
+    property <length> record-height;
+    property <length> record-mx;
+    property <length> record-my;
+
+    background: transparent;
+
+    Rectangle {
+        width: win-width;
+        height: win-height;
+        background: theme.content-background-color;
+        border-color: theme.content-border-color;
+        border-width: 1px;
+        border-radius: 4px;
+        area := TouchArea {
+            moved => {
+                BarGlobal.size-win(record-width / 1px,record-height / 1px,(self.mouse-x - record-x) / 1px,(self.mouse-y - record-y) / 1px,record-mx /1px,record-my /1px)
+            }
+            pointer-event(ev) => {
+                record-x = self.mouse-x;
+                record-y = self.mouse-y;
+                record-width = win-width;
+                record-height = win-height;
+                record-mx = win-width - self.mouse-x;
+                record-my = win-height -self.mouse-y;
+            }
+            mouse-cursor: win-width - self.mouse-x <= 8px && win-height -self.mouse-y <= 8px ? MouseCursor.se-resize :
+            MouseCursor.default;
+        }
+    }
+
+    Rectangle {
+        TouchArea {
+            pointer-event(ev) => {
+                
+            }
+            mouse-cursor: MouseCursor.default;
+        }
+
+        width: win-width - 4px;
+        height: win-height - 4px;
+        background: theme.content-background-color;
+        @children
+    }
+}
+
+export { Win }

@@ -1,0 +1,55 @@
+import { FFButton } from "../../widgets/FFButton.slint";
+import { FFTable } from "../../widgets/FFTable.slint";
+import { FFTheme } from "../../Theme.slint";
+import { ImageAttr } from "../../model/user/Image_attr_global.slint";
+import { ListView , ComboBox} from "std-widgets.slint";
+
+component ImageConvert inherits Rectangle{
+    
+    VerticalLayout {
+        HorizontalLayout {
+            alignment: LayoutAlignment.space-between;
+            Rectangle {
+                Text {
+                    text: "文件数量 : "+ ImageAttr.imageAttr.length;
+                }
+            }
+            HorizontalLayout {
+                ComboBox { 
+                    padding: 1px;
+                    width: 80px;
+                    model: ["Jpeg", "Png", "Ico","Svg","Bmp"];
+                    current-value:"Jpeg";
+                }
+                FFButton { 
+                    theme: FFTheme.theme.second-button;
+                    button-name: "选择文件夹";
+                    clicked => {
+                        ImageAttr.select-folder();
+                    }
+                }
+                FFButton { 
+                    theme: FFTheme.theme.second-button;
+                    button-name: "选择文件"; 
+                }
+                FFButton { 
+                    theme: FFTheme.theme.second-button;
+                    button-name: "开始转换";
+                    clicked => {
+                        ImageAttr.handle-image()
+                    }
+                }
+                FFButton { 
+                    theme: FFTheme.theme.second-button;
+                    button-name: "清空列表"; 
+                }
+            }
+            
+        }
+        FFTable{
+            image-attrs:ImageAttr.imageAttr;
+        }
+    }
+}
+
+export { ImageConvert }
