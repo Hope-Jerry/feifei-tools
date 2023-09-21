@@ -40,11 +40,15 @@ global ImageAttr {
     //存放当前选择的目录
     in-out property <string> current-path: "";
 
-    callback select-folder();
+    callback open-folder();
+
+    callback open-file();
 
     callback handle-image();
 
     callback clear-image-list();
+
+    callback switch-out-type(ImageConvertFormat);
 }
 
 

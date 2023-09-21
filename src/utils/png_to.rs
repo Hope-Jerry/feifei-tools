@@ -25,7 +25,8 @@ pub fn ff_png_to_ico(path: &str, out_path: &str) -> Option<bool> {
 ///
 pub fn ff_png_to_jpeg(path: &str, out_path: &str) -> Option<bool> {
     if let Ok(img) = image::open(path) {
-        if img.save(out_path).is_ok() {
+        let save_path = format!("{}.jpeg",out_path);
+        if img.save(save_path).is_ok() {
             return Some(true);
         }
     }
@@ -57,7 +58,7 @@ pub fn ff_png_to_bmp(path: &str, out_path: &str) -> Option<bool> {
 
     // 保存深度图为PNG格式（你也可以保存为其他格式，或将数据导出为其他格式）
     dmp_img
-        .save_with_format(format!("{}{}",out_path,".png"), ImageFormat::Png)
+        .save_with_format(format!("{}{}",out_path,".bmp"), ImageFormat::Bmp)
         .expect("Failed to save as DMP");
 
     Some(true)

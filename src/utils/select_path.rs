@@ -1,4 +1,6 @@
 
+use std::path::PathBuf;
+
 use image::{ImageFormat,io::Reader as ImageReader};
 use rfd::FileDialog;
 use crate::{ImageAttribute,ImageConvertFormat,HandleStatus};
@@ -13,6 +15,14 @@ pub fn open_folder() -> String {
     "".to_string()
 }
 
+pub fn open_file() -> Option<PathBuf> {
+    let files = FileDialog::new()
+    .add_filter("image", &["png","jpeg"])
+    .set_directory("/")
+    .pick_file();
+
+    files
+}
 
 pub fn image_arrtibute_init(path: &str,image_attribute: &mut ImageAttribute){
     if let Ok(img) = ImageReader::open(path){

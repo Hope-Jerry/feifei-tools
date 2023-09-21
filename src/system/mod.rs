@@ -10,7 +10,7 @@ pub use tray::show_tray_menu;
 
 use crate::Main;
 use tray_icon::{
-    menu::{Menu, MenuItem, IconMenuItem, Submenu},
+    menu::{Menu, MenuItem},
     Icon, TrayIconBuilder,
 };
 

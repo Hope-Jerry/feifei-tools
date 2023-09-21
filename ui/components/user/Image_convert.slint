@@ -1,16 +1,18 @@
 import { FFButton } from "../../widgets/FFButton.slint";
 import { FFTable } from "../../widgets/FFTable.slint";
 import { FFTheme } from "../../Theme.slint";
-import { ImageAttr } from "../../model/user/Image_attr_global.slint";
+import { ImageAttr,ImageConvertFormat } from "../../model/user/Image_attr_global.slint";
 import { ListView , ComboBox} from "std-widgets.slint";
 
 component ImageConvert inherits Rectangle{
     
     VerticalLayout {
         HorizontalLayout {
+            padding-left: 15px;
             alignment: LayoutAlignment.space-between;
             Rectangle {
                 Text {
+                    padding-left: 15px;
                     text: "文件数量 : "+ ImageAttr.imageAttr.length;
                 }
             }
@@ -20,17 +22,33 @@ component ImageConvert inherits Rectangle{
                     width: 80px;
                     model: ["Jpeg", "Png", "Ico","Svg","Bmp"];
                     current-value:"Jpeg";
+                    selected(tp) => {
+                        if(tp == "Jpeg"){
+                            ImageAttr.switch-out-type(ImageConvertFormat.Jpeg);
+                        }else if(tp == "Ico"){
+                            ImageAttr.switch-out-type(ImageConvertFormat.Ico);
+                        }else if(tp == "Png"){
+                            ImageAttr.switch-out-type(ImageConvertFormat.Png);
+                        }else if(tp == "Svg"){
+                            ImageAttr.switch-out-type(ImageConvertFormat.Svg);
+                        }else if(tp == "Bmp"){
+                            ImageAttr.switch-out-type(ImageConvertFormat.Bmp);
+                        }
+                    }
                 }
                 FFButton { 
                     theme: FFTheme.theme.second-button;
                     button-name: "选择文件夹";
                     clicked => {
-                        ImageAttr.select-folder();
+                        ImageAttr.open-folder();
                     }
                 }
                 FFButton { 
                     theme: FFTheme.theme.second-button;
                     button-name: "选择文件"; 
+                    clicked => {
+                        ImageAttr.open-file();
+                    }
                 }
                 FFButton { 
                     theme: FFTheme.theme.second-button;

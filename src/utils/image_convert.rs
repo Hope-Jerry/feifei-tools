@@ -9,7 +9,7 @@ impl ImageAttribute {
         //判断图片的类型
         let path = format!("{}/{}",self.path,self.name);
         let out_path = format!("{}/{}",self.out_path,self.out_name);
-        
+
         if let Some(_res) = ff_convert(
             &path,
             &out_path,
@@ -31,7 +31,6 @@ fn ff_convert(
     image_type: ImageConvertFormat,
     out_image_type: ImageConvertFormat,
 ) -> Option<bool> {
-    println!("{:?},{:?}",image_type,out_image_type);
     match image_type {
         ImageConvertFormat::Png => match out_image_type {
             ImageConvertFormat::Ico => {

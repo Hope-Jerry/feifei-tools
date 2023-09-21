@@ -11,7 +11,6 @@ pub fn show_tray_menu(weak: Weak<Main>){
         let weak = event_handle_weak;
         loop {
             if let Ok(event) = MenuEvent::receiver().recv_timeout(Duration::from_millis(200)) {
-                println!("event:{:?}", event);
                 if event.id.0 == "1000" {
                     break;
                 } else if event.id.0 == "1001" {
