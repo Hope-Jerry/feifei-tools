@@ -19,11 +19,11 @@ pub fn run_main(main: Main){
 
     let object_dir = env!("CARGO_MANIFEST_DIR");
 
-    let icon = Icon::from_path(
+    /*let icon = Icon::from_path(
         object_dir.to_string() + "/ui/assets/tray/theme.ico",
         Some((64, 64)),
     )
-    .unwrap();
+    .unwrap();*/
 
     let quit = MenuItem::new("退出", true, None);
     let show = MenuItem::new("主窗体", true, None);
@@ -51,7 +51,7 @@ pub fn run_main(main: Main){
     let _tray_icon = TrayIconBuilder::new()
         .with_menu(Box::new(tray_menu))
         .with_tooltip("工具箱")
-        .with_icon(icon)
+        //.with_icon(icon)
         .build()
         .unwrap();
 
