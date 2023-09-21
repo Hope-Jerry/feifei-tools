@@ -19,6 +19,11 @@ pub fn run_main(main: Main){
 
     let object_dir = env!("CARGO_MANIFEST_DIR");
 
+    let img = image::open(object_dir.to_string() + "/ui/assets/tray/theme.ico").unwrap();
+    let rgba = img.as_rgba8().unwrap();
+    let to_vec = rgba.to_vec();
+    let icon = Icon::from_rgba(to_vec, 64,64).unwrap();
+
     /*let icon = Icon::from_path(
         object_dir.to_string() + "/ui/assets/tray/theme.ico",
         Some((64, 64)),
@@ -51,7 +56,7 @@ pub fn run_main(main: Main){
     let _tray_icon = TrayIconBuilder::new()
         .with_menu(Box::new(tray_menu))
         .with_tooltip("工具箱")
-        //.with_icon(icon)
+        .with_icon(icon)
         .build()
         .unwrap();
 
