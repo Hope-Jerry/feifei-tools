@@ -17,7 +17,7 @@ tokio ={ version = "1",features = ["sync","rt-multi-thread","macros","time"]}
 tray-icon = "0.9"
 once_cell = "1.18.0"
 rfd = "0.11.4"
-[target."cfg(target_os = \"linux\")".dev-dependencies]
+[target.'cfg(unix)'.dependencies]
 gtk = "0.16"
 
 [build-dependencies]
