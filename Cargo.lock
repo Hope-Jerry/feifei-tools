@@ -1272,6 +1272,7 @@ name = "feifei-tools"
 version = "0.1.0"
 dependencies = [
  "base64",
+ "gtk",
  "i-slint-backend-winit",
  "ico",
  "image",

@@ -52,7 +52,25 @@ pub fn run_main(main: Main){
     let _ = tray_menu.append(&quit);
     
     
+    #[cfg(target_os = "linux")]
+    std::thread::spawn(|| {
+        use tray_icon::menu::Menu;
 
+        gtk::init().unwrap();
+        let _tray_icon = TrayIconBuilder::new()
+            .with_menu(Box::new(Menu::new()))
+            .with_icon(icon)
+            .build()
+            .unwrap();
+
+        gtk::main();
+
+        _tray_icon.set_title(Some("title"));
+
+        show_tray_menu(main.as_weak());
+    });
+
+    #[cfg(not(target_os = "linux"))]
     let _tray_icon = TrayIconBuilder::new()
         .with_menu(Box::new(tray_menu))
         .with_tooltip("工具箱")
@@ -60,8 +78,10 @@ pub fn run_main(main: Main){
         .build()
         .unwrap();
 
+    #[cfg(not(target_os = "linux"))]
     _tray_icon.set_title(Some("title"));
 
+    #[cfg(not(target_os = "linux"))]
     show_tray_menu(main.as_weak());
 
     main.run().expect("run mian failed!!!");
